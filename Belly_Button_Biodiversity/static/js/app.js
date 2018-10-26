@@ -1,13 +1,11 @@
 function buildMetadata(sample) {
 
-    // @TODO: Complete the following function that builds the metadata panel
-
     // Use `d3.json` to fetch the metadata for a sample
     var url = "/metadata/" + sample;
     d3.json(url).then(handleSuccess).catch(handleError)
 
     function handleSuccess(result) {
-        data = result;
+        var data = result;
 
         d3.select("#sample-metadata").html(""); //clear any existing metadata
 
@@ -33,16 +31,13 @@ function buildCharts(sample) {
 
     function handleSuccess(result) {
     // @TODO: Build a Bubble Chart using the sample data
-    // @TODO: Build a Pie Chart
-    // HINT: You will need to use slice() to grab the top 10 sample_values,
-    // otu_ids, and labels (10 each).
 
-        plotData = result;
-        xValue = plotData.otu_ids;
-        yValue = plotData.sample_values;
-        markerSize = plotData.sample_values;
-        markerColor = plotData.otu_ids;
-        textValue = plotData.otu_lables;
+        var bubbleData = result;
+        var xValue = bubbleData.otu_ids;
+        var yValue = bubbleData.sample_values;
+        var markerSize = bubbleData.sample_values;
+        var markerColor = bubbleData.otu_ids;
+        var textValue = bubbleData.otu_labels;
 
         var trace1 = {
             x: xValue,
@@ -60,11 +55,40 @@ function buildCharts(sample) {
         var layout = {
             title: 'Bubble Chart Hover Text',
             showlegend: false,
-            height: 600,
-            width: 600
         };
 
-        Plotly.newPlot("bubble-chart", data, layout);
+        Plotly.newPlot("bubble-chart", data, layout, {responsive: true});
+
+        // @TODO: Build a Pie Chart
+
+        // HINT: You will need to use slice() to grab the top 10 sample_values,
+        // otu_ids, and labels (10 each).
+
+        var rawData = result
+
+        var sortOtuIds = rawData.otu_ids.slice().sort((a,b) =>
+          rawData.sample_values[rawData.otu_ids.indexOf(b)] -
+          rawData.sample_values[rawData.otu_ids.indexOf(a)]);
+
+        var sortOtuLabels = rawData.otu_labels.slice().sort((a,b) =>
+          rawData.sample_values[rawData.otu_labels.indexOf(b)] -
+          rawData.sample_values[rawData.otu_labels.indexOf(a)]);
+
+        var sortSampleValues = rawData.sample_values.slice().sort((a,b) => b - a);
+
+        var label = sortOtuIds.slice(0,10)
+        var text = sortOtuLabels.slice(0,10)
+        var value = sortSampleValues.slice(0,10)
+
+        var data2 = [{
+          values: value,
+          labels: label,
+          hovertext: text,
+          type: 'pie'
+        }];
+
+        Plotly.newPlot("pie-chart", data2, {responsive: true});
+
     };
 
     function handleError(error) {
