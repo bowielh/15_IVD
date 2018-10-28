@@ -30,8 +30,8 @@ function buildCharts(sample) {
     d3.json(url).then(handleSuccess).catch(handleError)
 
     function handleSuccess(result) {
-    // @TODO: Build a Bubble Chart using the sample data
 
+        //Build a Bubble Chart using the sample data
         var bubbleData = result;
         var xValue = bubbleData.otu_ids;
         var yValue = bubbleData.sample_values;
@@ -59,23 +59,25 @@ function buildCharts(sample) {
 
         Plotly.newPlot("bubble-chart", data, layout, {responsive: true});
 
-        // @TODO: Build a Pie Chart
-
-        // HINT: You will need to use slice() to grab the top 10 sample_values,
-        // otu_ids, and labels (10 each).
-
+        // Build a Pie Chart
         var rawData = result
 
+        // Sort otu_ids by the values in sample_values; use slice() to create a
+        // copy of the array
         var sortOtuIds = rawData.otu_ids.slice().sort((a,b) =>
           rawData.sample_values[rawData.otu_ids.indexOf(b)] -
           rawData.sample_values[rawData.otu_ids.indexOf(a)]);
 
+        // Sort otu_labels by the values in sample_values; use slice() to create
+        // a copy of the array
         var sortOtuLabels = rawData.otu_labels.slice().sort((a,b) =>
           rawData.sample_values[rawData.otu_labels.indexOf(b)] -
           rawData.sample_values[rawData.otu_labels.indexOf(a)]);
 
+        // Sort sample_value; use slice() to create a copy of the array
         var sortSampleValues = rawData.sample_values.slice().sort((a,b) => b - a);
 
+        // Slice the arrays for the top ten values
         var label = sortOtuIds.slice(0,10)
         var text = sortOtuLabels.slice(0,10)
         var value = sortSampleValues.slice(0,10)

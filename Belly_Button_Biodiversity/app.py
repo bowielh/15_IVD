@@ -30,7 +30,6 @@ Base.prepare(db.engine, reflect=True)
 Samples_Metadata = Base.classes.sample_metadata
 Samples = Base.classes.samples
 
-
 @app.route("/")
 def index():
     """Return the homepage."""
