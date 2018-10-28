@@ -30,8 +30,7 @@ db = SQLAlchemy(app)
 # Samples_Metadata = Base.classes.sample_metadata
 # Samples = Base.classes.samples
 
-from models import Samples_Metadata
-from models import Samples
+import .models
 
 @app.route("/")
 def index():
