@@ -1,4 +1,4 @@
-from app import db
+from Belly_Button_Biodiversity.app import db
 import os
 
 import pandas as pd
